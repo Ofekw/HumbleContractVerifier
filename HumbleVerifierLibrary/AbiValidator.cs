@@ -15,15 +15,15 @@
 
     public class AbiValidator
     {
-        private readonly ChainTools chainTools;
+        protected readonly ChainTools chainTools;
 
-        private string apiKey;
+        public string APIKey { get; }
 
         public const string LocalAbiFileName = "MasterchefAbi.json";
 
         public AbiValidator(ChainTools chainTools, string apiKey)
         {
-            this.apiKey = apiKey;
+            this.APIKey = apiKey;
             this.chainTools = chainTools;
         }
 
@@ -82,7 +82,7 @@
         {
             string abi;
             HttpResponseMessage response =
-                await this.chainTools.HttpClient.GetAsync($"https://api.bscscan.com/api?module=contract&action=getabi&address={address}&apikey={this.apiKey}");
+                await this.chainTools.HttpClient.GetAsync($"https://api.bscscan.com/api?module=contract&action=getabi&address={address}&apikey={this.APIKey}");
 
             string body = await response.Content.ReadAsStringAsync();
             body.Should().NotBeNullOrEmpty();
