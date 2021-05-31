@@ -103,13 +103,13 @@
 
         private static string ReconstructMethodOutputsSignature(JToken methodData)
         {
-            var sig = new StringBuilder().Append((object?)methodData["name"]).Append(" returns");
+            var sig = new StringBuilder().Append((object)methodData["name"]).Append(" returns");
             return ReconstructSignatureFromParams(sig, methodData["outputs"]);
         }
 
         private static string ReconstructMethodSignature(JToken methodData)
         {
-            var sig = new StringBuilder().Append((object?)methodData["name"]);
+            var sig = new StringBuilder().Append((object)methodData["name"]);
             return ReconstructSignatureFromParams(sig, methodData["inputs"]);
         }
 
@@ -124,7 +124,7 @@
                     sig.Append(", ");
                 }
 
-                sig.Append((object?)input["type"]).Append(" ").Append((object?)input["name"]);
+                sig.Append((object)input["type"]).Append(" ").Append((object)input["name"]);
                 isFirst = false;
             }
 
