@@ -5,7 +5,14 @@
     <RepositoryUrl>https://github.com/Ofekw/HumbleContractVerifier/</RepositoryUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
+
+
+    <ItemGroup>
+      <None Include="..\LICENSE" Pack="true" PackagePath=""/>
+    </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="ConsoleTables" Version="2.4.2" />
