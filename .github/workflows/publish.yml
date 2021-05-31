@@ -30,13 +30,25 @@ jobs:
       id: current-time
       with:
         format: YYYY.MM.DD.HHmm
+        
+    - name: Use current time
+      env:
+        F_TIME: "${{ steps.current-time.outputs.formattedTime }}"
+      
+    - name: Pack
+      run: dotnet pack --configuration Release /p:Version=$F_TIME --no-build --output .
+    - name: Push
+      run: dotnet nuget push NuGet.Workflow.$F_TIME.nupkg --source https://api.nuget.org --api-key ${GITHUB_TOKEN}
+      env:
+        GITHUB_TOKEN: ${{secrets.NUGET_API_KEY}}
 
-    - name: publish on version change
-      id: publish_nuget
-      uses: rohith/publish-nuget@v2
-      with:
-        # Filepath of the project to be packaged, relative to root of repository
-        PROJECT_FILE_PATH: HumbleVerifierLibrary/HumbleVerifierLibrary.csproj
-        # API key to authenticate with NuGet server
-        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-        VERSION_STATIC: ${{ steps.current-time.outputs.formattedTime }}
+
+#     - name: publish on version change
+#       id: publish_nuget
+#       uses: rohith/publish-nuget@v2
+#       with:
+#         # Filepath of the project to be packaged, relative to root of repository
+#         PROJECT_FILE_PATH: HumbleVerifierLibrary/HumbleVerifierLibrary.csproj
+#         # API key to authenticate with NuGet server
+#         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+#         VERSION_STATIC: ${{ steps.current-time.outputs.formattedTime }}
