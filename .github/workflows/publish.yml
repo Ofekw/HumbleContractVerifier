@@ -30,8 +30,6 @@ jobs:
       id: current-time
       with:
         format: YYYY.MM.DD.HHmm
-        
-    - name: Use current time
       env:
         F_TIME: "${{ steps.current-time.outputs.formattedTime }}"
       
