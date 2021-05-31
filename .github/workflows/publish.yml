@@ -34,9 +34,9 @@ jobs:
         F_TIME: "${{ steps.current-time.outputs.formattedTime }}"
       
     - name: Pack
-      run: dotnet pack --configuration Release /p:Version=$F_TIME --no-build --output .
+      run: dotnet pack --configuration Release /p:Version=${F_TIME} --no-build --output .
     - name: Push
-      run: dotnet nuget push NuGet.Workflow.$F_TIME.nupkg --source https://api.nuget.org --api-key ${GITHUB_TOKEN}
+      run: dotnet nuget push NuGet.Workflow.${F_TIME}.nupkg --source https://api.nuget.org --api-key ${GITHUB_TOKEN}
       env:
         GITHUB_TOKEN: ${{secrets.NUGET_API_KEY}}
 
