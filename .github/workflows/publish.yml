@@ -36,7 +36,7 @@ jobs:
     - name: Pack
       run: dotnet pack --configuration Release /p:Version=${{ steps.current-time.outputs.formattedTime }} --no-build --output .
     - name: Push
-      run: dotnet nuget push HumbleVerifierLibrary.${{ steps.current-time.outputs.formattedTime }}.nupkg --source https://api.nuget.org --api-key ${{secrets.NUGET_API_KEY}}
+      run: dotnet nuget push HumbleVerifierLibrary.${{ steps.current-time.outputs.formattedTime }}.nupkg --source https://www.nuget.org --api-key ${{secrets.NUGET_API_KEY}}
 
 
 #     - name: publish on version change
