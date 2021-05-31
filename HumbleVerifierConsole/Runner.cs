@@ -1,28 +1,18 @@
-﻿namespace ContractVerifier
+﻿namespace HumbleVerifierConsole
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.IO.Abstractions;
     using System.Linq;
     using System.Net.Http;
-    using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
-
     using ConsoleTables;
-
     using HumbleVerifierLibrary;
     using HumbleVerifierLibrary.Contracts;
-
     using Nethereum.ABI.FunctionEncoding;
     using Nethereum.Contracts;
-
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
-
-    using OwnerOfFunction = HumbleVerifierLibrary.OwnerOfFunction;
-    using PoolLengthFunction = HumbleVerifierLibrary.PoolLengthFunction;
-    using SymbolFunction = HumbleVerifierLibrary.SymbolFunction;
 
     public class Runner
     {
@@ -39,10 +29,9 @@
             this.verifierResponseDto = new VerifierResponseDto();
         }
 
-        /// <summary>
-        /// Run the logic
-        /// </summary>
-        /// <param name="contractAddress">Address of the contract to check. If masterchefonly, this is masterchef. Otherwise this is token address</param>
+        /// <summary>Run the logic</summary>
+        /// <param name="contractAddress">Address of the contract to check. If masterchefonly, this
+        /// is masterchef. Otherwise this is token address</param>
         /// <param name="isMasterchefOnly">Validate masterchef only</param>
         /// <returns>Async task</returns>
         public async Task Run(string contractAddress, bool isMasterchefOnly)
@@ -56,13 +45,14 @@
                 tokenAddress = contractAddress;
                 tokenName = await this.chainTools.GetFunction<SymbolFunction, string>(contractAddress);
                 masterChef = await this.chainTools.GetFunction<OwnerOfFunction, string>(contractAddress); // should be masterchef
-                verifierResponseDto.MasterChefAddress = masterChef;
+                this.verifierResponseDto.MasterChefAddress = masterChef;
                 Console.WriteLine($"Token Name: {tokenName}");
                 Console.WriteLine($"Token Address: {tokenAddress}");
             }
 
             Console.WriteLine($"MasterChef Address: {masterChef}");
             JToken masterchefSource = await GetSourceCode(masterChef, this.chainTools, this.abiValidator.APIKey);
+
             if (!this.chainTools.UseLocalAbi && !IsContract(masterchefSource))
             {
                 Console.WriteLine($"!!! Owner of token {tokenName} is not a contract !!!");
@@ -73,6 +63,7 @@
             int startBlock = await this.chainTools.GetFunction<StartBlockFunction, int>(masterChef);
             this.verifierResponseDto.StartBlock = startBlock;
             Console.WriteLine($"StartBlock: {startBlock}");
+
             if (this.chainTools.UseLocalAbi)
             {
                 Console.WriteLine("TO BE IMPLEMENTED: Estimate launch date");
@@ -85,6 +76,7 @@
             }
 
             JToken timeLockSource = JToken.FromObject(string.Empty);
+
             try
             {
                 timeLockSource = await this.ProcessTimelock(masterChef);
@@ -97,12 +89,14 @@
             try
             {
                 string masterchefAbi = await this.abiValidator.FetchAbiFromApiAsync(masterChef);
+
                 if (masterchefAbi == null)
                 {
                     return;
                 }
 
                 List<string> methodsWithPossibleWithdrawFee = this.abiValidator.GetMethodsWithPossibleWithdrawalFee(masterchefAbi);
+
                 if (methodsWithPossibleWithdrawFee.Any())
                 {
                     Console.WriteLine("!!! WARNING: Methods with possible withdrawal fee detected !!!");
@@ -127,6 +121,7 @@
                     Function poolInfoFunc = contract.GetFunction(functionName);
 
                     var poolInfoOutputs = new List<string> { "pair" };
+
                     foreach (JToken output in poolInfoFunctionBlock["outputs"])
                     {
                         string outputName = output["name"].ToString();
@@ -138,11 +133,12 @@
 
                     for (int i = 0; i < poolLength; i++)
                     {
-                        PoolDto dto = new PoolDto();
+                        var dto = new PoolDto();
                         List<ParameterOutput> result = await poolInfoFunc.CallDecodingToDefaultAsync(i);
 
                         string pairString;
                         string token0 = null;
+
                         try
                         {
                             token0 = await this.chainTools.GetFunction<Token0Function, string>(result[0].Result.ToString());
@@ -165,18 +161,10 @@
                             pairString = await this.chainTools.GetFunction<SymbolFunction, string>(result[0].Result.ToString());
                         }
 
-                        List<string> results = new List<string> { pairString };
+                        var results = new List<string> { pairString };
                         string[] poolOutputs = result.Select(x => x.Result.ToString()).ToArray();
                         results.AddRange(poolOutputs);
                         table.AddRow(results.ToArray());
-
-                        for (int j = 1; j < poolInfoOutputs.Count; j++)
-                        {
-                            var key = poolInfoOutputs[i];
-                            var value = poolOutputs[i];
-                            dto.PoolDetailsRaw.Add(key, value);
-                        }
-                        this.verifierResponseDto.Pools.Add(dto);
                     }
 
                     table.Write(Format.MarkDown);
@@ -196,6 +184,7 @@
             {
                 string path = Path.Combine(Environment.GetEnvironmentVariable("TEMP"), tokenName);
                 var dir = new DirectoryInfo(path);
+
                 if (dir.Exists)
                 {
                     dir.Delete(true);
@@ -205,10 +194,13 @@
 
                 Console.WriteLine($"Saving contracts to: {dir.FullName}");
 
-                JToken tokenContract = Deserializer.SafeUnencodeJson((await GetSourceCode(contractAddress, this.chainTools, this.abiValidator.APIKey)).ToString(), out ContractType contractType);
+                JToken tokenContract = Deserializer.SafeUnencodeJson((await GetSourceCode(contractAddress, this.chainTools, this.abiValidator.APIKey)).ToString(),
+                                                                     out ContractType contractType);
+
                 this.verifierResponseDto.TokenSourceCode = tokenContract;
                 JToken masterchefContract = Deserializer.SafeUnencodeJson(masterchefSource.ToString(), out contractType);
                 this.verifierResponseDto.MasterChefSourceCode = masterchefContract;
+
                 if (IsContract(timeLockSource))
                 {
                     JToken timelockContract = Deserializer.SafeUnencodeJson(timeLockSource.ToString(), out contractType);
@@ -229,6 +221,7 @@
             var jObject = JsonConvert.DeserializeObject<JObject>(body);
 
             JToken result = jObject["result"];
+
             if (result.ToString().Contains("already pass"))
             {
                 return DateTime.MinValue;
@@ -243,7 +236,7 @@
 
         private static async Task<JToken> GetSourceCode(string address, ChainTools chainTools, string apiKey)
         {
-           HttpResponseMessage response = await chainTools.HttpClient.GetAsync($"api?module=contract&action=getsourcecode&address={address}&apikey={apiKey}");
+            HttpResponseMessage response = await chainTools.HttpClient.GetAsync($"api?module=contract&action=getsourcecode&address={address}&apikey={apiKey}");
             string body = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<JToken>(body)["result"] as JArray;
             return result[0]["SourceCode"];
@@ -255,6 +248,7 @@
             JToken timeLockSource = await GetSourceCode(timeLock, this.chainTools, this.abiValidator.APIKey);
 
             Console.WriteLine($"TimeLock Address: {timeLock}");
+
             if (IsContract(timeLockSource) || this.chainTools.UseLocalAbi)
             {
                 string pendingAdmin = await this.chainTools.GetFunction<PendingAdminFunction, string>(timeLock);

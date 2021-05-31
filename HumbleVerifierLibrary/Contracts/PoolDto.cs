@@ -8,6 +8,7 @@ namespace HumbleVerifierLibrary.Contracts
     {
         public string TokenOneSymbol { get; set; } = string.Empty;
         public string TokenTwoSymbol { get; set; } = string.Empty;
-        public IDictionary<string,string> PoolDetailsRaw { get; set; }
+
+        public IDictionary<string, string> PoolDetailsRaw { get; set; } = new Dictionary<string, string>();
     }
 }
