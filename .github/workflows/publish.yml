@@ -25,6 +25,12 @@ jobs:
       run: dotnet build --no-restore
 
     # Publish
+    - name: Current Time 2
+      uses: srfrnk/current-time@v1.1.0
+      id: current-time
+      with:
+        format: YYYY.MM.DD.HHmm
+
     - name: publish on version change
       id: publish_nuget
       uses: rohith/publish-nuget@v2
@@ -33,4 +39,4 @@ jobs:
         PROJECT_FILE_PATH: HumbleVerifierLibrary/HumbleVerifierLibrary.csproj
         # API key to authenticate with NuGet server
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-        VERSION_STATIC: $(date "+%Y.%m.%d-%H.%M")
+        VERSION_STATIC: ${{ steps.current-time.outputs.formattedTime }}
