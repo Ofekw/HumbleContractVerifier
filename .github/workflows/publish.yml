@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  publish:
 
     runs-on: ubuntu-latest
     
@@ -33,3 +33,4 @@ jobs:
         PROJECT_FILE_PATH: HumbleVerifierLibrary/HumbleVerifierLibrary.csproj
         # API key to authenticate with NuGet server
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+        VERSION_STATIC: $(date "+%Y.%m.%d-%H.%M")
