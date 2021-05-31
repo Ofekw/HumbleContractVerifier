@@ -29,7 +29,7 @@ jobs:
       uses: srfrnk/current-time@v1.1.0
       id: current-time
       with:
-        format: YYYY.MM.DD.HHmm
+        format: YYYY.M.D.Hm
       env:
         F_TIME: "${{ steps.current-time.outputs.formattedTime }}"
       
