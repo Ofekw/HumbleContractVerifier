@@ -33,15 +33,4 @@ jobs:
     - name: Pack Library and Console app
       run: dotnet pack --configuration Release /p:Version=${{ steps.current-time.outputs.formattedTime }} --no-build HumbleVerifierLibrary
     - name: Push to nuget
-      run: dotnet nuget push HumbleVerifierLibrary/bin/Release/HumbleVerifierLibrary.${{ steps.current-time.outputs.formattedTime }}.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
-
-
-#     - name: publish on version change
-#       id: publish_nuget
-#       uses: rohith/publish-nuget@v2
-#       with:
-#         # Filepath of the project to be packaged, relative to root of repository
-#         PROJECT_FILE_PATH: HumbleVerifierLibrary/HumbleVerifierLibrary.csproj
-#         # API key to authenticate with NuGet server
-#         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-#         VERSION_STATIC: ${{ steps.current-time.outputs.formattedTime }}
+      run: dotnet nuget push HumbleVerifierLibrary/bin/Release/HumbleContractVerifier.${{ steps.current-time.outputs.formattedTime }}.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
