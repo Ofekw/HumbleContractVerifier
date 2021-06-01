@@ -5,12 +5,13 @@
     <RepositoryUrl>https://github.com/Ofekw/HumbleContractVerifier/</RepositoryUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <Name>HumbleContractVerifier</Name>
+    <Id>HumbleContractVerifier</Id>
     <Authors>ofekw,bichuga</Authors>
+    <AssemblyName>HumbleContractVerifier</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\LICENSE" Pack="true" PackagePath=""/>
+    <None Include="..\LICENSE" Pack="true" PackagePath="" />
     <Content Include="..\HumbleVerifierConsole\bin\Release\net5.0\win-x64\publish\*.dll">
       <PackagePath>content</PackagePath>
       <Pack>true</Pack>

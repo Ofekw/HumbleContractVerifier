@@ -16,6 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HumbleVerifierLibrary\HumbleVerifierLibrary.csproj" />
+    <ProjectReference Include="..\HumbleVerifierLibrary\HumbleVerifier.csproj" />
   </ItemGroup>
 </Project>
