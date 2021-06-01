@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumbleVerifierLibrary", "Hu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumbleVerifierTests", "HumbleVerifierTests\HumbleVerifierTests.csproj", "{81C8FF4E-B7ED-4CFA-97FA-7D86F3FCD82F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HumbleVerifierConsole", "HumbleVerifierConsole\HumbleVerifierConsole.csproj", "{82C5507C-920A-48D0-8E44-0CF634AD4983}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumbleVerifierConsole", "HumbleVerifierConsole\HumbleVerifierConsole.csproj", "{82C5507C-920A-48D0-8E44-0CF634AD4983}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

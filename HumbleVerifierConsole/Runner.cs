@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.IO.Abstractions;
     using System.Linq;
     using System.Net.Http;
     using System.Threading.Tasks;
@@ -194,17 +195,15 @@
 
                 Console.WriteLine($"Saving contracts to: {dir.FullName}");
 
-                JToken tokenContract = Deserializer.SafeUnencodeJson((await GetSourceCode(contractAddress, this.chainTools, this.abiValidator.APIKey)).ToString(),
-                                                                     out ContractType contractType);
-
-                this.verifierResponseDto.TokenSourceCode = tokenContract;
+                var writer = new ContractWriter(new FileSystem());
+                JToken tokenContract = Deserializer.SafeUnencodeJson((await GetSourceCode(contractAddress, this.chainTools, this.abiValidator.APIKey)).ToString(), out ContractType contractType);
+                writer.WriteToDisk(tokenContract, contractType, tokenName, dir.FullName);
                 JToken masterchefContract = Deserializer.SafeUnencodeJson(masterchefSource.ToString(), out contractType);
-                this.verifierResponseDto.MasterChefSourceCode = masterchefContract;
-
+                writer.WriteToDisk(masterchefContract, contractType, "MasterChef", dir.FullName);
                 if (IsContract(timeLockSource))
                 {
                     JToken timelockContract = Deserializer.SafeUnencodeJson(timeLockSource.ToString(), out contractType);
-                    this.verifierResponseDto.TimelockSourceCode = timelockContract;
+                    writer.WriteToDisk(timelockContract, contractType, "Timelock", dir.FullName);
                 }
             }
         }

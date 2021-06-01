@@ -5,6 +5,8 @@
     <RepositoryUrl>https://github.com/Ofekw/HumbleContractVerifier/</RepositoryUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Name>HumbleContractVerifier</Name>
+    <Authors>ofekw,bichuga</Authors>
   </PropertyGroup>
 
   <ItemGroup>
