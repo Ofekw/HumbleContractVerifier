@@ -8,10 +8,6 @@ jobs:
   publish:
 
     runs-on: ubuntu-latest
-    
-    defaults:
-      run:
-        working-directory: HumbleVerifierLibrary
 
     steps:
     - uses: actions/checkout@v2
@@ -32,11 +28,12 @@ jobs:
         format: YYYY.M.D.Hm
       env:
         F_TIME: "${{ steps.current-time.outputs.formattedTime }}"
-      
-    - name: Pack
-      run: dotnet pack --configuration Release /p:Version=${{ steps.current-time.outputs.formattedTime }} --no-build --output .
-    - name: Push
-      run: dotnet nuget push HumbleVerifierLibrary.${{ steps.current-time.outputs.formattedTime }}.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
+    - name: Publish HumbleVerifier.exe single-file app
+      run: dotnet publish --configuration Release --no-build HumbleVerifierConsole
+    - name: Pack Library and Console app
+      run: dotnet pack --configuration Release /p:Version=${{ steps.current-time.outputs.formattedTime }} --no-build HumbleVerifierLibrary
+    - name: Push to nuget
+      run: dotnet nuget push HumbleVerifierLibrary\bin\Release\HumbleVerifierLibrary.${{ steps.current-time.outputs.formattedTime }}.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
 
 
 #     - name: publish on version change

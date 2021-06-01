@@ -9,11 +9,11 @@
 
   <ItemGroup>
     <None Include="..\LICENSE" Pack="true" PackagePath=""/>
-    <Content Include="..\HumbleVerifierConsole\bin\Release\$(TargetFramework)\$(RuntimeIdentifier)\publish\*.dll">
+    <Content Include="..\HumbleVerifierConsole\bin\Release\net5.0\win-x64\publish\*.dll">
       <PackagePath>content</PackagePath>
       <Pack>true</Pack>
     </Content>
-    <Content Include="..\HumbleVerifierConsole\bin\Release\$(TargetFramework)\$(RuntimeIdentifier)\publish\*.exe">
+    <Content Include="..\HumbleVerifierConsole\bin\Release\net5.0\win-x64\publish\*.exe">
       <PackagePath>content</PackagePath>
       <Pack>true</Pack>
     </Content>
