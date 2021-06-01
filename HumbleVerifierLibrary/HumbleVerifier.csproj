@@ -8,6 +8,8 @@
     <Id>HumbleContractVerifier</Id>
     <Authors>ofekw,bichuga</Authors>
     <AssemblyName>HumbleContractVerifier</AssemblyName>
+    <Description>A set of tools to validate goose-style masterchef contracts in the wild west of defi.</Description>
+    <PackageReleaseNotes>Initial release. Supports only BSC</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
