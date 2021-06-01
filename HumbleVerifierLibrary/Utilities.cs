@@ -19,10 +19,12 @@
                     innerClient.BaseAddress = new Uri("https://api.bscscan.com/");
                     web3 = new Web3("https://bsc-dataseed3.binance.org/");
                     break;
-                default:
+                case 137:
                     web3 = new Web3("https://rpc-mainnet.maticvigil.com/");
                     useLocalAbi = true;
                     break;
+                default:
+                    throw new ApplicationException("Unsupported chain ID " + chainId);
             }
 
             var tools = new ChainTools(client, web3, useLocalAbi);
