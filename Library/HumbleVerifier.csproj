@@ -5,15 +5,20 @@
     <RepositoryUrl>https://github.com/Ofekw/HumbleContractVerifier/</RepositoryUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Id>HumbleContractVerifier</Id>
+    <Authors>ofekw,bichuga</Authors>
+    <AssemblyName>HumbleContractVerifier</AssemblyName>
+    <Description>A set of tools to validate goose-style masterchef contracts in the wild west of defi.</Description>
+    <PackageReleaseNotes>Initial release. Supports only BSC</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\LICENSE" Pack="true" PackagePath=""/>
-    <Content Include="..\HumbleVerifierConsole\bin\Release\net5.0\win-x64\publish\*.dll">
+    <None Include="..\LICENSE" Pack="true" PackagePath="" />
+    <Content Include="..\Console\bin\Release\net5.0\win-x64\publish\*.dll">
       <PackagePath>content</PackagePath>
       <Pack>true</Pack>
     </Content>
-    <Content Include="..\HumbleVerifierConsole\bin\Release\net5.0\win-x64\publish\*.exe">
+    <Content Include="..\Console\bin\Release\net5.0\win-x64\publish\*.exe">
       <PackagePath>content</PackagePath>
       <Pack>true</Pack>
     </Content>

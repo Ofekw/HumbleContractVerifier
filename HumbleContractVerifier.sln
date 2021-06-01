@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31229.75
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumbleVerifierLibrary", "HumbleVerifierLibrary\HumbleVerifierLibrary.csproj", "{70EAB320-F85B-44DD-85A7-3674884A1298}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumbleVerifier", "Library\HumbleVerifier.csproj", "{70EAB320-F85B-44DD-85A7-3674884A1298}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumbleVerifierTests", "HumbleVerifierTests\HumbleVerifierTests.csproj", "{81C8FF4E-B7ED-4CFA-97FA-7D86F3FCD82F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumbleVerifierTests", "Tests\HumbleVerifierTests.csproj", "{81C8FF4E-B7ED-4CFA-97FA-7D86F3FCD82F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HumbleVerifierConsole", "HumbleVerifierConsole\HumbleVerifierConsole.csproj", "{82C5507C-920A-48D0-8E44-0CF634AD4983}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HumbleVerifierConsole", "Console\HumbleVerifierConsole.csproj", "{82C5507C-920A-48D0-8E44-0CF634AD4983}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
