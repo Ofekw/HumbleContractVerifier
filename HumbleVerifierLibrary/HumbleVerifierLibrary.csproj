@@ -4,15 +4,20 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RepositoryUrl>https://github.com/Ofekw/HumbleContractVerifier/</RepositoryUrl>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
-
-    <ItemGroup>
-      <None Include="..\LICENSE" Pack="true" PackagePath=""/>
-    </ItemGroup>
-
+  <ItemGroup>
+    <None Include="..\LICENSE" Pack="true" PackagePath=""/>
+    <Content Include="..\HumbleVerifierConsole\bin\Release\$(TargetFramework)\$(RuntimeIdentifier)\publish\*.dll">
+      <PackagePath>content</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+    <Content Include="..\HumbleVerifierConsole\bin\Release\$(TargetFramework)\$(RuntimeIdentifier)\publish\*.exe">
+      <PackagePath>content</PackagePath>
+      <Pack>true</Pack>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="ConsoleTables" Version="2.4.2" />
