@@ -26,7 +26,7 @@
 
         public AbiValidator Build()
         {
-            var chainTools = new ChainTools(this.httpClient, this.web3, false);
+            var chainTools = new ChainTools(this.httpClient, this.web3, false, 2.1);
             return new AbiValidator(chainTools, "key");
         }
     }
