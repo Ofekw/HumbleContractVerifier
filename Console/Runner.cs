@@ -44,8 +44,8 @@
             if (!isMasterchefOnly)
             {
                 tokenAddress = contractAddress;
-                tokenName = await this.chainTools.GetFunction<SymbolFunction, string>(contractAddress);
-                masterChef = await this.chainTools.GetFunction<OwnerOfFunction, string>(contractAddress); // should be masterchef
+                tokenName = await this.chainTools.QueryContract<SymbolFunction, string>(contractAddress);
+                masterChef = await this.chainTools.QueryContract<OwnerOfFunction, string>(contractAddress); // should be masterchef
                 this.verifierResponseDto.MasterChefAddress = masterChef;
                 Console.WriteLine($"Token Name: {tokenName}");
                 Console.WriteLine($"Token Address: {tokenAddress}");
@@ -61,7 +61,7 @@
                 return;
             }
 
-            int startBlock = await this.chainTools.GetFunction<StartBlockFunction, int>(masterChef);
+            int startBlock = await this.chainTools.QueryContract<StartBlockFunction, int>(masterChef);
             this.verifierResponseDto.StartBlock = startBlock;
             Console.WriteLine($"StartBlock: {startBlock}");
 
@@ -129,7 +129,7 @@
                         poolInfoOutputs.Add(outputName);
                     }
 
-                    int poolLength = await this.chainTools.GetFunction<PoolLengthFunction, int>(masterChef);
+                    int poolLength = await this.chainTools.QueryContract<PoolLengthFunction, int>(masterChef);
                     var table = new ConsoleTable(poolInfoOutputs.ToArray());
 
                     for (int i = 0; i < poolLength; i++)
@@ -142,7 +142,7 @@
 
                         try
                         {
-                            token0 = await this.chainTools.GetFunction<Token0Function, string>(result[0].Result.ToString());
+                            token0 = await this.chainTools.QueryContract<Token0Function, string>(result[0].Result.ToString());
                         }
                         catch
                         {
@@ -150,16 +150,16 @@
 
                         if (!string.IsNullOrWhiteSpace(token0))
                         {
-                            string token1 = await this.chainTools.GetFunction<Token1Function, string>(result[0].Result.ToString());
-                            string token0Name = await this.chainTools.GetFunction<SymbolFunction, string>(token0);
-                            string token1Name = await this.chainTools.GetFunction<SymbolFunction, string>(token1);
+                            string token1 = await this.chainTools.QueryContract<Token1Function, string>(result[0].Result.ToString());
+                            string token0Name = await this.chainTools.QueryContract<SymbolFunction, string>(token0);
+                            string token1Name = await this.chainTools.QueryContract<SymbolFunction, string>(token1);
                             dto.TokenOneSymbol = token0Name;
                             dto.TokenTwoSymbol = token1Name;
                             pairString = $"{token0Name}-{token1Name}";
                         }
                         else
                         {
-                            pairString = await this.chainTools.GetFunction<SymbolFunction, string>(result[0].Result.ToString());
+                            pairString = await this.chainTools.QueryContract<SymbolFunction, string>(result[0].Result.ToString());
                         }
 
                         var results = new List<string> { pairString };
@@ -243,17 +243,17 @@
 
         private async Task<JToken> ProcessTimelock(string masterChef)
         {
-            string timeLock = await this.chainTools.GetFunction<OwnerOfFunction, string>(masterChef); // owner of masterchef should be timelock
+            string timeLock = await this.chainTools.QueryContract<OwnerOfFunction, string>(masterChef); // owner of masterchef should be timelock
             JToken timeLockSource = await GetSourceCode(timeLock, this.chainTools, this.abiValidator.APIKey);
 
             Console.WriteLine($"TimeLock Address: {timeLock}");
 
             if (IsContract(timeLockSource) || this.chainTools.UseLocalAbi)
             {
-                string pendingAdmin = await this.chainTools.GetFunction<PendingAdminFunction, string>(timeLock);
+                string pendingAdmin = await this.chainTools.QueryContract<PendingAdminFunction, string>(timeLock);
                 Console.WriteLine($"TimeLock Pending Admin: {pendingAdmin}");
-                int delay = await this.chainTools.GetFunction<TimelockDelayFunction, int>(timeLock);
-                int minDelay = await this.chainTools.GetFunction<MinimumDelayFunction, int>(timeLock);
+                int delay = await this.chainTools.QueryContract<TimelockDelayFunction, int>(timeLock);
+                int minDelay = await this.chainTools.QueryContract<MinimumDelayFunction, int>(timeLock);
 
                 Console.WriteLine($"TimeLock delay: {Math.Round(delay / 60.0 / 60.0, 2)} hours. Minimum delay: {Math.Round(minDelay / 60.0 / 60.0, 2)} hours");
             }
