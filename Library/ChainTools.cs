@@ -15,12 +15,14 @@
         /// <param name="web3">Web3 client for interacting with blockchain</param>
         /// <param name="useLocalAbi">Whether to pull masterchef ABI from local file</param>
         /// <param name="avgBlockTimeSec">The average amount of time to mine a block on this chain.</param>
-        public ChainTools(IHttpClient httpClient, Web3 web3, bool useLocalAbi, double avgBlockTimeSec)
+        /// <param name="networkName">Name of the Ethereum network</param>
+        public ChainTools(IHttpClient httpClient, Web3 web3, bool useLocalAbi, double avgBlockTimeSec, string networkName)
         {
             this.HttpClient = httpClient;
             this.Web3 = web3;
             this.UseLocalAbi = useLocalAbi;
             this.AvgBlockTimeSec = avgBlockTimeSec;
+            this.NetworkName = networkName;
         }
 
         /// <summary>
@@ -44,13 +46,18 @@
         public double AvgBlockTimeSec { get; }
 
         /// <summary>
+        /// The name of the Ethereum chain. ETH, BSC, POLYGON, FANTOM
+        /// </summary>
+        public string NetworkName { get; }
+
+        /// <summary>
         /// Query a blockchain function
         /// </summary>
         /// <typeparam name="T">The function message to query.</typeparam>
         /// <typeparam name="U">The type of the result to return.</typeparam>
         /// <param name="address">Address of the contract to query.</param>
         /// <returns>The typed result from querying the contract.</returns>
-        public async Task<U> GetFunction<T, U>(string address)
+        public async Task<U> QueryContract<T, U>(string address)
             where T : FunctionMessage, new()
         {
             var t = new T();

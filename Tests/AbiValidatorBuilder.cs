@@ -1,7 +1,5 @@
 ﻿namespace HumbleVerifierTests
 {
-    using System.IO.Abstractions;
-
     using HumbleVerifierLibrary;
 
     using Nethereum.Web3;
@@ -22,11 +20,9 @@
             this.web3 = new Web3("http://foo");
         }
 
-        public IFileSystem FileSystem { get; }
-
         public AbiValidator Build()
         {
-            var chainTools = new ChainTools(this.httpClient, this.web3, false, 2.1);
+            var chainTools = new ChainTools(this.httpClient, this.web3, false, 2.1, "POLYGON");
             return new AbiValidator(chainTools, "key");
         }
     }
