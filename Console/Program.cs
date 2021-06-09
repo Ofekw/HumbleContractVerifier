@@ -12,7 +12,7 @@
                 .WithParsedAsync(options =>
                 {
                     ChainTools chainTools = Utilities.GetChainTools(options.ChainId);
-                    var abiValidator = new AbiValidator(chainTools, options.ApiKey);
+                    var abiValidator = new AbiTools(chainTools, options.ApiKey);
                     var launchPad = new Runner(chainTools, abiValidator);
                     return launchPad.Run(options.ContractAddress, options.MasterchefOnly);
                 });

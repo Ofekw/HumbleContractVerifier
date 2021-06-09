@@ -19,14 +19,14 @@
     {
         private readonly ChainTools chainTools;
 
-        private readonly AbiValidator abiValidator;
+        private readonly AbiTools abiTools;
 
         private readonly VerifierResponseDto verifierResponseDto;
 
-        public Runner(ChainTools chainTools, AbiValidator abiValidator)
+        public Runner(ChainTools chainTools, AbiTools abiTools)
         {
             this.chainTools = chainTools;
-            this.abiValidator = abiValidator;
+            this.abiTools = abiTools;
             this.verifierResponseDto = new VerifierResponseDto();
         }
 
@@ -52,9 +52,9 @@
             }
 
             Console.WriteLine($"MasterChef Address: {masterChef}");
-            JToken masterchefSource = await GetSourceCode(masterChef, this.chainTools, this.abiValidator.APIKey);
+            JToken masterchefSource = await GetSourceCode(masterChef, this.chainTools, this.abiTools.APIKey);
 
-            if (!this.chainTools.UseLocalAbi && !IsContract(masterchefSource))
+            if (!(this.chainTools.NetworkName == "POLYGON") && !IsContract(masterchefSource))
             {
                 Console.WriteLine($"!!! Owner of token {tokenName} is not a contract !!!");
                 this.verifierResponseDto.OwnerOfTokenIsAContract = false;
@@ -65,13 +65,13 @@
             this.verifierResponseDto.StartBlock = startBlock;
             Console.WriteLine($"StartBlock: {startBlock}");
 
-            if (this.chainTools.UseLocalAbi)
+            if ((this.chainTools.NetworkName == "POLYGON"))
             {
                 Console.WriteLine("TO BE IMPLEMENTED: Estimate launch date");
             }
             else
             {
-                DateTime estLaunch = await GetLaunchDate(startBlock, this.chainTools, this.abiValidator.APIKey);
+                DateTime estLaunch = await GetLaunchDate(startBlock, this.chainTools, this.abiTools.APIKey);
                 this.verifierResponseDto.EstimatedLaunchTime = estLaunch;
                 Console.WriteLine("Estimated launch date (PST): " + (estLaunch == DateTime.MinValue ? "Already launched" : estLaunch.ToString("G")));
             }
@@ -89,14 +89,14 @@
 
             try
             {
-                string masterchefAbi = await this.abiValidator.FetchAbiFromApiAsync(masterChef);
+                string masterchefAbi = await this.abiTools.FetchAbiFromApiAsync(masterChef);
 
                 if (masterchefAbi == null)
                 {
                     return;
                 }
 
-                List<string> methodsWithPossibleWithdrawFee = this.abiValidator.GetMethodsWithPossibleWithdrawalFee(masterchefAbi);
+                List<string> methodsWithPossibleWithdrawFee = this.abiTools.GetMethodsWithPossibleWithdrawalFee(masterchefAbi);
 
                 if (methodsWithPossibleWithdrawFee.Any())
                 {
@@ -112,7 +112,7 @@
                 Console.WriteLine("Pool info:");
 
                 JArray abiArray = JArray.Parse(masterchefAbi);
-                JToken poolInfoFunctionBlock = AbiValidator.GetFunctionsByName(abiArray, "poolInfo").FirstOrDefault();
+                JToken poolInfoFunctionBlock = AbiTools.GetFunctionsByName(abiArray, "poolInfo").FirstOrDefault();
 
                 if (poolInfoFunctionBlock != null)
                 {
@@ -177,7 +177,7 @@
                 Console.WriteLine("error fetching pool info: " + e);
             }
 
-            if (this.chainTools.UseLocalAbi)
+            if ((this.chainTools.NetworkName == "POLYGON"))
             {
                 Console.WriteLine("TO BE IMPLEMENTED: Fetch contract source code");
             }
@@ -196,7 +196,7 @@
                 Console.WriteLine($"Saving contracts to: {dir.FullName}");
 
                 var writer = new ContractWriter(new FileSystem());
-                JToken tokenContract = Deserializer.SafeUnencodeJson((await GetSourceCode(contractAddress, this.chainTools, this.abiValidator.APIKey)).ToString(), out ContractType contractType);
+                JToken tokenContract = Deserializer.SafeUnencodeJson((await GetSourceCode(contractAddress, this.chainTools, this.abiTools.APIKey)).ToString(), out ContractType contractType);
                 writer.WriteToDisk(tokenContract, contractType, tokenName, dir.FullName);
                 JToken masterchefContract = Deserializer.SafeUnencodeJson(masterchefSource.ToString(), out contractType);
                 writer.WriteToDisk(masterchefContract, contractType, "MasterChef", dir.FullName);
@@ -244,11 +244,11 @@
         private async Task<JToken> ProcessTimelock(string masterChef)
         {
             string timeLock = await this.chainTools.QueryContract<OwnerOfFunction, string>(masterChef); // owner of masterchef should be timelock
-            JToken timeLockSource = await GetSourceCode(timeLock, this.chainTools, this.abiValidator.APIKey);
+            JToken timeLockSource = await GetSourceCode(timeLock, this.chainTools, this.abiTools.APIKey);
 
             Console.WriteLine($"TimeLock Address: {timeLock}");
 
-            if (IsContract(timeLockSource) || this.chainTools.UseLocalAbi)
+            if (IsContract(timeLockSource) || (this.chainTools.NetworkName == "POLYGON"))
             {
                 string pendingAdmin = await this.chainTools.QueryContract<PendingAdminFunction, string>(timeLock);
                 Console.WriteLine($"TimeLock Pending Admin: {pendingAdmin}");

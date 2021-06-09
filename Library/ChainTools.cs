@@ -13,14 +13,12 @@
         /// </summary>
         /// <param name="httpClient">Http Client for making web requests</param>
         /// <param name="web3">Web3 client for interacting with blockchain</param>
-        /// <param name="useLocalAbi">Whether to pull masterchef ABI from local file</param>
         /// <param name="avgBlockTimeSec">The average amount of time to mine a block on this chain.</param>
         /// <param name="networkName">Name of the Ethereum network</param>
-        public ChainTools(IHttpClient httpClient, Web3 web3, bool useLocalAbi, double avgBlockTimeSec, string networkName)
+        public ChainTools(IHttpClient httpClient, IWeb3 web3, double avgBlockTimeSec, string networkName)
         {
             this.HttpClient = httpClient;
             this.Web3 = web3;
-            this.UseLocalAbi = useLocalAbi;
             this.AvgBlockTimeSec = avgBlockTimeSec;
             this.NetworkName = networkName;
         }
@@ -33,12 +31,7 @@
         /// <summary>
         /// Web3 client for interacting with blockchain
         /// </summary>
-        public Web3 Web3 { get; }
-
-        /// <summary>
-        /// Whether to pull masterchef ABI from local file
-        /// </summary>
-        public bool UseLocalAbi { get; }
+        public IWeb3 Web3 { get; }
 
         /// <summary>
         /// The average amount of time to mine a block on this chain in seconds.
