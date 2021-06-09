@@ -10,9 +10,8 @@
         public static ChainTools GetChainTools(int chainId)
         {
             var innerClient = new HttpClient();
-            Web3 web3;
+            IWeb3 web3;
             IHttpClient client = new HumbleHttpClient(innerClient);
-            bool useLocalAbi = false;
             double avgBlockTimeSec;
             string networkName;
             switch (chainId)
@@ -24,8 +23,8 @@
                     networkName = "BSC";
                     break;
                 case 137:
+                    innerClient.BaseAddress = new Uri("https://api.polygonscan.com/");
                     web3 = new Web3("https://rpc-mainnet.maticvigil.com/");
-                    useLocalAbi = true;
                     avgBlockTimeSec = 2.1;
                     networkName = "POLYGON";
                     break;
@@ -33,7 +32,7 @@
                     throw new ApplicationException("Unsupported chain ID " + chainId);
             }
 
-            var tools = new ChainTools(client, web3, useLocalAbi, avgBlockTimeSec, networkName);
+            var tools = new ChainTools(client, web3, avgBlockTimeSec, networkName);
             return tools;
         }
     }
