@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "HumbleVerifierConsole": {
-      "commandName": "Project",
-      "commandLineArgs": "0xf1f1024f4f36001e5c0a1ad3ef5d0cc7c01af5fb"
-    }
-  }
-}
