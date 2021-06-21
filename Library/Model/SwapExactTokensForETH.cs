@@ -1,4 +1,4 @@
-﻿namespace HumbleUtilities
+﻿namespace HumbleVerifierLibrary
 {
     using System.Collections.Generic;
     using System.Numerics;

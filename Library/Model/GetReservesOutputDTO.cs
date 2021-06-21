@@ -1,4 +1,4 @@
-﻿namespace HumbleUtilities
+﻿namespace HumbleVerifierLibrary
 {
     using System.Numerics;
     using Nethereum.ABI.FunctionEncoding.Attributes;
